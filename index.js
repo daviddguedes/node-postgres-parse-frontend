@@ -69,7 +69,7 @@ app.get('/posts/edit/:id', function (req, res) {
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
-    console.log('parse-server-example running on port ' + port + '.');
+    console.log('node-postgres-parse-frontend example running on port ' + port + '.');
 });
 
 ParseServer.createLiveQueryServer(httpServer);
