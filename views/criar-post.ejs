@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Editar Posts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/libs/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 id="titulo"></h1>
+
+        Título: <input type="text" id="txtTitulo"><br>
+        Conteúdo: <textarea id="txtConteudo"></textarea><br>
+        <button type="button" id="btnCriar">Criar</button>
+        <a href="/posts">Ver posts</a>
+
+    </div>
+
+    <script src="/public/libs/jquery.min.js"></script>
+    <script src="/public/libs/parse.min.js"></script>
+
+    <script>
+        (function () {
+            Parse.initialize("myAppId", "jjjjjj");
+            Parse.serverURL = 'http://localhost:1337/blog';
+
+            $('#btnCriar').click(function(e) {
+                var post = new Parse.Object("Posts");
+                post.set("titulo", $('#txtTitulo').val());
+                post.set("conteudo", $('#txtConteudo').val());
+
+                post.save({
+                    success: function (post) {
+                        console.log("Post criado: ", post);
+                        location.href = "/posts";
+                    },
+                    error: function (user, error) {
+                        alert("Error: " + error.code + " " + error.message);
+                    }
+                });
+            });
+
+            $('#titulo').html('Novo Post');
+        })()
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Editar Posts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/libs/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 id="titulo"></h1>
+        <p>Editar o Post ID: <%= id %></p>
+
+        <input type="text" id="txtTitulo"><br>
+        <textarea id="txtConteudo"></textarea><br>
+        <button type="button" id="btnAlterar">Alterar</button>
+
+    </div>
+
+    <input type="hidden" id="idhidden" value="<%= id %>">
+
+    <script src="/public/libs/jquery.min.js"></script>
+    <script src="/public/libs/parse.min.js"></script>
+
+    <script>
+        (function () {
+            Parse.initialize("myAppId", "jjjjjj");
+            Parse.serverURL = 'http://localhost:1337/blog';
+
+            let postEditar;
+
+            var Posts = Parse.Object.extend("Posts");
+            var query = new Parse.Query(Posts);
+            query.get($('#idhidden').val(), {
+                success: function(post) {
+                   postEditar = post;
+                   $('#txtTitulo').val( post.get('titulo') );
+                   $('#txtConteudo').val( post.get('conteudo') );
+                },
+                error: function(object, error) {
+                    console.log(error);
+                }
+            });
+
+            $('#btnAlterar').click(function(e) {
+                postEditar.save({
+                    titulo: $('#txtTitulo').val(),
+                    conteudo: $('#txtConteudo').val()
+                }).then(function(response) {
+                    console.log(response);
+                });
+            });
+
+            $('#titulo').html('Editar Post');
+        })()
+    </script>
+</body>
+
+</html>

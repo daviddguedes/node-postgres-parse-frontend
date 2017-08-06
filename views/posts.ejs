@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Posts</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/libs/bootstrap.min.css">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 id="titulo"></h1>
+        <a href="/create">Criar um Post</a>
+
+        <ul id="posts">
+
+        </ul>
+
+    </div>
+
+    <script src="/public/libs/jquery.min.js"></script>
+    <script src="/public/libs/parse.min.js"></script>
+
+    <script>
+        (function () {
+            Parse.initialize("myAppId", "jjjjjj");
+            Parse.serverURL = 'http://localhost:1337/blog';
+
+            let q = new Parse.Query("Posts");
+            let subscription = q.subscribe();
+
+            subscription.on('create', function(object) {
+                var Posts = Parse.Object.extend("Posts");
+                var query = new Parse.Query(Posts);
+                query.find({
+                    success: function (posts) {
+                        $('ul').empty();
+                        posts.forEach(function (element) {
+                            $('ul#posts').append('<li>' + element.get('titulo') + 
+                            '<br>' + element.get('conteudo') + '<br><a href="posts/edit/' + element.id + 
+                            '">Editar</a> - <a id="deletePost" href="javascript:void(0)" data-id="' +element.id+ '">Excluir</a><hr></li>');
+                        }, this);
+                    },
+                    error: function (object, error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            subscription.on('delete', function(object) {
+                var Posts = Parse.Object.extend("Posts");
+                var query = new Parse.Query(Posts);
+                query.find({
+                    success: function (posts) {
+                        $('ul').empty();
+                        posts.forEach(function (element) {
+                            $('ul#posts').append('<li>' + element.get('titulo') + 
+                            '<br>' + element.get('conteudo') + '<br><a href="posts/edit/' + element.id + 
+                            '">Editar</a> - <a id="deletePost" href="javascript:void(0)" data-id="' +element.id+ '">Excluir</a><hr></li>');
+                        }, this);
+                    },
+                    error: function (object, error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            var Posts = Parse.Object.extend("Posts");
+            var query = new Parse.Query(Posts);
+            query.find({
+                success: function (posts) {
+                    posts.forEach(function (element) {
+                        console.log(element.get('titulo'));
+                        $('ul#posts').append('<li>' + element.get('titulo') + 
+                        '<br>' + element.get('conteudo') + '<br><a href="posts/edit/' + element.id + 
+                        '">Editar</a> - <a id="deletePost" href="javascript:void(0)" data-id="' +element.id+ '">Excluir</a><hr></li>');
+                    }, this);
+                },
+                error: function (object, error) {
+                    console.log(error);
+                }
+            });
+
+            $('body').on('click', '#deletePost', function(e) {
+                let id = $(this).data("id");
+                var Posts = Parse.Object.extend("Posts");
+                var query = new Parse.Query(Posts);
+                query.get(id, {
+                    success: function(post) {
+                        post.destroy().then(function(res) {
+                            console.log("Post deletado!");
+                            location.reload();
+                        });
+                    }, error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+            $('#titulo').html('Posts');
+        })()
+    </script>
+</body>
+
+</html>
