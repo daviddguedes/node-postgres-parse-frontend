@@ -38,8 +38,8 @@
 
     <script>
         (function () {
-            Parse.initialize("myAppId", "jjjjjj");
-            Parse.serverURL = 'http://localhost:1337/blog';
+            Parse.initialize("myAppId", "myJavascriptKey");
+            Parse.serverURL = 'http://localhost:1337/api/v1';
 
             var currentUser = Parse.User.current();
             if (currentUser) {

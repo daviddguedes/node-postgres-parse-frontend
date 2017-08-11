@@ -7,10 +7,10 @@ var api = new ParseServer({
   databaseURI: 'postgres://postgres:postgres@localhost:5432/blog',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || 'pppppp',
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/blog',
-  restAPIKey: 'rrrrrr',
-  javascriptKey: 'jjjjjj',
+  masterKey: process.env.MASTER_KEY || 'myMasterKey',
+  serverURL: process.env.SERVER_URL || 'http://localhost:1337/api/v1',
+  restAPIKey: 'myRestApiKey',
+  javascriptKey: 'myJavascriptKey',
   liveQuery: {
     classNames: ["Posts"]
   }
@@ -33,7 +33,7 @@ app.use('/public', express.static(path.join(__dirname, '/public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-var mountPath = process.env.PARSE_MOUNT || '/blog';
+var mountPath = process.env.PARSE_MOUNT || '/api/v1';
 app.use(mountPath, api);
 
 // app.use('/dashboard', dashboard);
@@ -66,7 +66,7 @@ app.get('/posts/edit/:id', function (req, res) {
   res.render('editar-posts', { id: req.params.id });
 });
 
-var port = process.env.PORT || 1337;
+var port = process.env.PORT || 1335;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
     console.log('node-postgres-parse-frontend example running on port ' + port + '.');
